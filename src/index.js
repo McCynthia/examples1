@@ -1,10 +1,13 @@
 const express = require('express');
 const app = express();
+const persist = require('./service/store');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-const pets = [{type: 'cats', quantity: 3, members: [{name: 'Otis', ageInYears: 12, color: 'black&white'}]}, {type: 'dogs', quantity: 4, members: [{name: 'Flaco', ageInYears: 10, color: 'black'}]}, {type: 'bunnies', quantity: 10, members: [{name: 'Snowball', ageInYears: 3, color: 'white'}]}];
+const petsFile = 'pets.txt';
+//const pets = [{type: 'cats', quantity: 3, members: [{name: 'Otis', ageInYears: 12, color: 'black&white'}]}, {type: 'dogs', quantity: 4, members: [{name: 'Flaco', ageInYears: 10, color: 'black'}]}, {type: 'bunnies', quantity: 10, members: [{name: 'Snowball', ageInYears: 3, color: 'white'}]}];
+const pets = persist.read(petsFile);
 
 
 app.get('/', function(req, res) {
@@ -34,6 +37,7 @@ app.post('/pets', function(req, res) {
 	const pet = req.body;
 	console.log(pet);
 	pets.push(pet);
+	persist.save(pets, petsFile);
 	res.status(200).json(pets);
 });
 
@@ -46,6 +50,7 @@ app.post('/pets/:type', function(req, res) {
 	if (typeof found != 'undefined') {
 		found.members.push(miembro);
 		res.status(200).json(found);
+		persist.save(pets, petsFile);
 	} else {
 		res.status(404).json('pet not found');
 	}
@@ -59,6 +64,7 @@ app.put('/pets', function(req, res) {
 	if (typeof found !== 'undefined') {
 		found.quantity = pet.quantity;
 		res.status(200).json(pets);
+		persist.save(pets, petsFile);
 	} else {
 		res.status(404).json('pet not found');
 	}
