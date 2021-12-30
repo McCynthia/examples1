@@ -15,7 +15,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/store', function(req, res) {
-	res.status(200).json(pets);
+	res.status(200).json(store);
 });
 
 app.get('/food/dogs', function(req, res) {
@@ -26,7 +26,7 @@ app.get('/food/dogs', function(req, res) {
 app.get('/store/:type', function(req, res) {
 	const type = req.params.type;
 	console.log(type);
-	const found = pets.find(element => element.type === type);
+	const found = store.find(element => element.type === type);
 	res.status(200).json(found);
 });
 
