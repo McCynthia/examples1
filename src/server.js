@@ -1,4 +1,5 @@
-const app = require('./index')
+//const app = require('./index')
+const app = require('./store')
 // const express = require('express');
 // const router = express.Router();
 // const app = express();
