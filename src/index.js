@@ -1,31 +1,27 @@
 const express = require('express');
-const app = express();
+//const app = express();
+const petRouter = express.Router()
 const persist = require('./service/store');
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+// petRouter.use(express.urlencoded({ extended: true }));
+// petRouter.use(express.json());
 
 const petsFile = 'pets.txt';
 //const pets = [{type: 'cats', quantity: 3, members: [{name: 'Otis', ageInYears: 12, color: 'black&white'}]}, {type: 'dogs', quantity: 4, members: [{name: 'Flaco', ageInYears: 10, color: 'black'}]}, {type: 'bunnies', quantity: 10, members: [{name: 'Snowball', ageInYears: 3, color: 'white'}]}];
 const pets = persist.read(petsFile);
 
 
-app.get('/', function(req, res) {
-	const menu = ['Pets', 'Services', 'Accesories'];
-	res.status(200).json(menu);
-});
+// petRouter.get('/', function(req, res) {
+// 	const menu = ['Pets', 'Services', 'Accesories'];
+// 	res.status(200).json(menu);
+// });
 
 
-app.get('/pets', function(req, res) {
+petRouter.get('/pets', function(req, res) {
 	res.status(200).json(pets);
 });
 
-app.get('/pets/dogs', function(req, res) {
-	// buscar los typos = dogs y regresarlos
-	res.status(200).json(pets);
-});
-
-app.get('/pets/:type', function(req, res) {
+petRouter.get('/pets/:type', function(req, res) {
 	const type = req.params.type;
 	console.log(type);
 	const found = pets.find(element => element.type === type);
@@ -33,7 +29,7 @@ app.get('/pets/:type', function(req, res) {
 });
 
 
-app.post('/pets', function(req, res) {
+petRouter.post('/pets', function(req, res) {
 	const pet = req.body;
 	console.log(pet);
 	pets.push(pet);
@@ -42,7 +38,7 @@ app.post('/pets', function(req, res) {
 });
 
 
-app.post('/pets/:type', function(req, res) {
+petRouter.post('/pets/:type', function(req, res) {
 	const type = req.params.type;
 	const miembro = req.body;
 	// Traverse array: pets.forEach(mascota => console.log(mascota));
@@ -57,7 +53,7 @@ app.post('/pets/:type', function(req, res) {
 });
 
 
-app.put('/pets', function(req, res) {
+petRouter.put('/pets', function(req, res) {
 	const pet = req.body;
 	console.log(pet);
 	const found = pets.find(element => element.type === pet.type);
@@ -71,7 +67,7 @@ app.put('/pets', function(req, res) {
 });
 
 
-module.exports = app;
+module.exports = petRouter;
 
 
 //app.use('/', petsApi);
