@@ -4,5 +4,4 @@
 {"type":"pinguinos","quantity":2}
 {"type":"alpacas","quantity":5}
 {"type":"birds","quantity":1}
-undefined
 {"type":"pigs","quantity":1}
