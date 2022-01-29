@@ -1,16 +1,21 @@
 const express = require('express');
-const router = express.Router();
+const petsController = require('./controller/petsController');
+const storeController = require('./controller/storeController');
 
+const appRouter =  express.Router()
+appRouter.use(express.urlencoded({ extended: true }));
+appRouter.use(express.json());
 
-router.get('/', petApi);
-
-
-router.get('*', function(req, res){
-    res.status(400).json({ error: 'Endpoint not found'});
+appRouter.get('/', function(req, res) {
+    const menu = ['Pets', 'Services', 'Accesories'];
+    res.status(200).json(menu);
 });
+appRouter.get('/pets', petsController.pets_get);
+appRouter.get('/pets/:type', petsController.pets_list_type);
+appRouter.post('/pets', petsController.pets_post);
+appRouter.post('/pets/:type', petsController.pet_put_type);
+appRouter.put('/pets', petsController.pet_put_type);
 
-module.exports = router;
+appRouter.get('/store', storeController.store_get);
 
-function petApi(req, res) {
-	return res.status(200).json({ cats: 3, dogs: 5, bunnies: 20});
-}
+module.exports = appRouter;

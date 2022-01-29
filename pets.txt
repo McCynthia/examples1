@@ -1,5 +1,7 @@
-{"type":"cats","quantity":3,"members":[{"name":"Otis","ageInYears":12,"color":"black&white"}]}
+{"type":"cats","quantity":1,"members":[{"name":"Otis","ageInYears":12,"color":"black&white"}]}
 {"type":"dogs","quantity":4,"members":[{"name":"Flaco","ageInYears":10,"color":"black"},{"name":"Snoopy","ageInYears":12,"color":"white"}]}
 {"type":"bunnies","quantity":10,"members":[{"name":"Snowball","ageInYears":3,"color":"white"}]}
 {"type":"pinguinos","quantity":2}
 {"type":"alpacas","quantity":5}
+{"type":"birds","quantity":1}
+{"type":"pigs","quantity":1}

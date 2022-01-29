@@ -1,15 +1,15 @@
-//const app = require('./index')
-const app = require('./store')
-// const express = require('express');
-// const router = express.Router();
-// const app = express();
+const express = require('express');
+const appRouter = require('./routes')
+
+const app = express();
 
 let port;
-
+app.use('/', appRouter);
 const server = app.listen(3000, () => {
 	port = server.address().port;
 	console.log('Server ready at port %s', port);
 });
+app.use(appRouter);
 
 process.on('SIGINT', () => {
     console.log('Closing services....');
