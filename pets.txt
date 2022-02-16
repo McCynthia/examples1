@@ -5,4 +5,3 @@
 {"type":"alpacas","quantity":5}
 {"type":"birds","quantity":1}
 {"type":"pigs","quantity":1}
-undefined

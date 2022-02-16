@@ -1,73 +1,37 @@
-const persist = require('../service/store');
+const Pet = require('../model/pet')
 
-const petsFile = 'pets.txt';
-const pets = persist.read(petsFile);
-
-exports.pets_get = function(req, res) {
+exports.pets_get = async function(req, res) {
+    const pets = await Pet.find({});
     res.status(200).json(pets);
 }
-exports.pets_list_type = function(req, res) {
+
+exports.pets_list_type = async function(req, res) {
     const type = req.params.type;
-    console.log(type);
-    const found = pets.find(element => element.type === type);
+    const found = await Pet.find({ type });
     res.status(200).json(found);
 }
 
-exports.pets_post = function(req, res) {
-    const pet = req.body;
-    console.log(pet);
-    pets.push(pet);
-    console.log(pets);
-    persist.save(pets, petsFile);
-    res.status(200).json(pets);
-}
-
-exports.pets_post_type = function(req, res) {
-    const type = req.params.type;
+exports.pets_post_type = async function(req, res) {
     const miembro = req.body;
-    // Traverse array: pets.forEach(mascota => console.log(mascota));
-    const found = pets.find(mascota => mascota.type === type);
-    console.log('Found %j', found);
-    if (typeof found != 'undefined') {
-        found.members.push(miembro);
-        res.status(200).json(found);
-        persist.save(pets, petsFile);
-    } else {
-        res.status(404).json('pet not found');
+    const newPetDoc = new Pet(miembro);
+    try {
+        const result = await newPetDoc.save();
+        return res.status(201).json(result);
+    }
+    catch(err){
+        return res.status(400).json({ error: err });
     }
 }
 
-exports.pet_put_type = function(req, res) {
-    const type = req.params.type;
-    const pet = req.body;
-    console.log(pet);
-    const found = pets.find(element => element.type === type);
-    if (typeof found !== 'undefined') {
-        found.quantity = pet.quantity;
-        res.status(200).json(pets);
-        persist.save(pets, petsFile);
-    } else {
-        res.status(404).json('pet not found');
-    }
-}
-
-exports.pet_put_type_name = function(req, res) {
-    const type = req.params.type;
+exports.pet_put_type_name = async function(req, res) {
     const name = req.params.name;
-    console.log('Looking for %s in %s', name, type);
+    console.log('Looking for %s ', name);
     const pet = req.body;
-    console.log(pet);
-    const indexPetTypeFound = pets.findIndex(element => element.type === type);
-    if (indexPetTypeFound >= 0) {
-        console.log('Found %j', pets[indexPetTypeFound]);
-         const indexPetFound = pets[indexPetTypeFound].members.findIndex(element => element.name === name);
-        if (indexPetFound >= 0) {
-            console.log('Found %j', pets[indexPetTypeFound].members[indexPetFound]);
-            pets[indexPetTypeFound].members[indexPetFound] = {...pets[indexPetTypeFound].members[indexPetFound], ...pet };
-            res.status(200).json(pets);
-            persist.save(pets, petsFile);
-            return;
-        }
+    const found = await Pet.find({ name });
+    if (found) {
+        console.log('Found %j', found);
+        const updatedPet = await Pet.findOneAndUpdate({ name }, pet, { new: true });
+        return res.status(200).json(updatedPet);
     }
     res.status(404).json('pet not found');
 }
