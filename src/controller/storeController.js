@@ -1,3 +1,43 @@
+const Store = require('../model/storeitems')
+
+exports.store_get = async function(req, res) {
+    const items = await Store.find({});
+    res.status(200).json(items);
+}
+
+exports.store_list_type = async function(req, res) {
+    const type = req.params.type;
+    const found = await Store.find({ type });
+    res.status(200).json(found);
+}
+
+exports.store_post_type = async function(req, res) {
+    const type = req.body;
+    const newStoreDoc = new Store(type);
+    try {
+        const result = await newStoreDoc.save();
+        return res.status(201).json(result);
+    }
+    catch(err){
+        return res.status(400).json({ error: err });
+    }
+}
+
+exports.store_put_type = async function(req, res) {
+    const item = req.params.item;
+    console.log('Looking for %s ', item);
+    const storeitems = req.body;
+    const found = await Store.find({ item });
+    if (found) {
+        console.log('Found %j', found);
+        const updatedStore = await Store.findOneAndUpdate({ item }, storeitems, { new: true });
+        return res.status(200).json(updatedStore);
+    }
+    res.status(404).json('item not found');
+}
+
+
+/*
 const persist = require('../service/store');
 
 const storeFile = 'store.txt';
@@ -11,9 +51,9 @@ exports.store_get = function(req, res) {
 
 exports.store_list_type = function(req, res) {
 	const type = req.params.type;
-	consolo.log(type);
+	console.log(type);
 	const found = store.find(element => element.type === type);
-	res.status(200).jason(found)
+	res.status(200).json(found)
 }
 
 
@@ -53,6 +93,10 @@ exports.store_put_type = function(req, res) {
 		res.status(404).json('item not found');
 	}
 }
+*/
+
+
+
 //
 // app.get('/food/dogs', function(req, res) {
 // 	// buscar los typos = dogs y regresarlos

@@ -17,8 +17,7 @@ appRouter.put('/pets/:name', petsController.pet_put_type_name);
 
 appRouter.get('/store', storeController.store_get);
 appRouter.get('/store/:type', storeController.store_list_type);
-appRouter.post('/store', storeController.store_post);
+appRouter.post('/store', storeController.store_post_type);
 appRouter.post('/store/:type', storeController.store_put_type);
-appRouter.put('/store', storeController.store_put_type);
 
 module.exports = appRouter;
